@@ -1,0 +1,16 @@
+{
+  "name": "vendor-search",
+  "version": "1.0.0",
+  "description": "Vendor search app with Relevance AI",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.1",
+    "cors": "^2.8.5"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
