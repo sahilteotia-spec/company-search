@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-
 const app = express();
 
 // middleware
@@ -11,12 +10,12 @@ app.use(express.json());
 // serve static files
 app.use(express.static(__dirname));
 
-// root route
+// force root route (IMPORTANT for Railway)
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
-// API route (Relevance AI trigger)
+// API route (proxy to Relevance AI)
 app.post("/api/search", async (req, res) => {
   try {
     const { query } = req.body;
@@ -47,10 +46,12 @@ app.post("/api/search", async (req, res) => {
       return res.status(500).json({ error: "Relevance AI request failed" });
     }
 
+    // Relevance AI webhook is async — it runs in background
+    // Return Done immediately with sheet link
     res.json({
       status: "Done",
       message: "Search triggered successfully",
-      link: "https://docs.google.com/spreadsheets/d/1aWRXc-QUQI7MglnCK8Xk0EirqnOg8XMRhYFDhihoOHM/edit"
+      link: "https://docs.google.com/spreadsheets/d/1a4D2MlZHLZ8zp8cD125iTcM2tkb14ap6hLNPHtio3sg/edit?gid=0#gid=0"
     });
 
   } catch (error) {
@@ -59,9 +60,8 @@ app.post("/api/search", async (req, res) => {
   }
 });
 
-// port (Railway compatible)
+// Railway port (DO NOT TOUCH)
 const PORT = process.env.PORT || 5000;
-
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
 });
